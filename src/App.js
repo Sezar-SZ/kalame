@@ -4,6 +4,14 @@ import "./App.css";
 
 const App = () => {
     const [word, setWord] = useState("");
+    const [gameMap, setGameMap] = useState([
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+    ]);
 
     const getNewWord = async () => {
         try {
@@ -29,8 +37,22 @@ const App = () => {
 
     return (
         <div className="App">
-            <h2>hello word</h2>
-            <h2>{word}</h2>
+            <div className="header">
+                <h1>کلمه</h1>
+            </div>
+            <div className="game">
+                <div className="map">
+                    {gameMap.map((row) => (
+                        <div className="row">
+                            {row.map((cell) => (
+                                <div className="cell">
+                                    <h3>{cell}</h3>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
