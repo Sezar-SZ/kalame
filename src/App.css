@@ -16,6 +16,40 @@ body {
 
 .header {
   flex: 1;
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.header h1{
+  font-size: 3vmin;
+}
+.message{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  width: 35%;
+  margin: 2vh auto;
+}
+.message h2{
+  width: 100%;
+  text-align: center;
+}
+
+.score{
+  display: flex;
+  align-items: center;
+  font-size: 1.6vmin;
+  
+}
+.score *{
+  margin: 2px;
+}
+
+.score span{
+  font-size: 2vmin;
 }
 
 .game {

@@ -4,6 +4,10 @@ import "./App.css";
 import useKeyPress from "./hooks/useKeyPress";
 
 const App = () => {
+    const [score, setScore] = useState("");
+    const [highScore, setHighScore] = useState("");
+
+    const [wordsList, setWordsList] = useState([]);
     const [word, setWord] = useState("");
     const [wordLetterFrequency, setWordLetterFrequency] = useState(new Map());
     const [gameMap, setGameMap] = useState([
@@ -23,6 +27,20 @@ const App = () => {
         ["", "", "", "", ""],
     ]);
     const [currentRow, setCurrentRow] = useState(0);
+
+    const [message, setMessage] = useState("");
+
+    const getData = () => {
+        const data = JSON.parse(localStorage.getItem("data")) || {
+            score: 0,
+            highScore: 0,
+        };
+        setScore(data["score"]);
+        setHighScore(data["highScore"]);
+    };
+    const setData = (data) => {
+        localStorage.setItem("data", JSON.stringify(data));
+    };
 
     const getNextLetterIndex = () => {
         for (let i = 0; i < 6; i++) {
@@ -56,9 +74,10 @@ const App = () => {
             const res = await fetch(txt_words);
             const data = await res.text();
 
-            const words = data.split("\n");
+            const words = data.split("\n").map((element) => element.trim());
+            setWordsList(words);
             const randomIndex = Math.floor(Math.random() * words.length);
-            const randomWord = words[randomIndex].trim();
+            const randomWord = words[randomIndex];
             setWord(randomWord);
 
             let letterFreq = new Map();
@@ -78,6 +97,7 @@ const App = () => {
 
     useEffect(() => {
         getNewWord();
+        getData();
     }, []);
 
     useKeyPress((key) => {
@@ -95,9 +115,12 @@ const App = () => {
                 newGameMap[letterIndex[0]][letterIndex[1]] = "";
             }
         } else if (key === "Enter") {
-            if (!gameMap[currentRow].includes("") && currentRow <= 5) {
-                const guessedWord = getGuessedWord(currentRow);
-
+            const guessedWord = getGuessedWord(currentRow);
+            if (
+                !gameMap[currentRow].includes("") &&
+                currentRow <= 5 &&
+                wordsList.includes(guessedWord)
+            ) {
                 const guessedLetters = new Map();
                 const greenCells = [];
                 for (let i = 0; i < guessedWord.length; i++) {
@@ -134,6 +157,10 @@ const App = () => {
                                         guessedWord[i],
                                         guessedLetters.get(guessedWord[i]) + 1
                                     );
+                            } else {
+                                let newCellsClassName = cellsClassNames;
+                                newCellsClassName[currentRow][i] = "gray";
+                                setCellsClassNames(newCellsClassName);
                             }
                         } else {
                             let newCellsClassName = cellsClassNames;
@@ -142,7 +169,31 @@ const App = () => {
                         }
                     }
                 }
+                if (guessedWord === word) {
+                    setData({
+                        score: score + 1,
+                        highScore:
+                            score + 1 > highScore ? score + 1 : highScore,
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else if (currentRow === 5 && guessedWord !== word) {
+                    setData({
+                        score: 0,
+                        highScore: highScore,
+                    });
+                    setMessage(word);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
                 setCurrentRow(currentRow + 1);
+            } else {
+                setMessage("کلمه صحیح نیست");
+                setTimeout(() => {
+                    setMessage("");
+                }, 1000);
             }
         }
     });
@@ -153,15 +204,30 @@ const App = () => {
 
     return (
         <div className="App">
-            <div className="header">
+            <div className="header" dir="rtl">
+                <div className="score">
+                    <h3>امتیاز فعلی:</h3>
+                    <span>{score}</span>
+                </div>
                 <h1>کـلــمــه</h1>
+                <div className="score">
+                    <h3>بیشترین امتیاز:</h3>
+                    <span>{highScore}</span>
+                </div>
             </div>
             <div className="game">
+                <div
+                    className="message"
+                    style={{ opacity: message ? "100" : "0" }}
+                >
+                    <p dir="rtl">{message}</p>
+                </div>
                 <div className="map">
                     {gameMap.map((row, row_indx) => (
-                        <div className="row">
+                        <div className="row" key={row_indx}>
                             {row.map((cell, cell_indx) => (
                                 <div
+                                    key={cell_indx}
                                     className={`cell ${cellsClassNames[row_indx][cell_indx]}`}
                                 >
                                     <h3>{cell}</h3>
