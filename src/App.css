@@ -1,36 +1,38 @@
-body{
- background-color: #121213; 
- font-family: 'Iranian Sans';
- color: white;
+body {
+  background-color: #121213;
+  font-family: 'Iranian Sans';
+  color: white;
 }
 
-.App{
+.App {
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+
 }
 
-.header{
+.header {
   flex: 1;
 }
-.game{
+
+.game {
   flex: 9;
   width: 70vw;
   margin: 2vh 0;
 }
 
-.row{
+.row {
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
   flex: 1;
 }
-.cell{
+
+.cell {
   padding: 2vmin;
   width: 4vmin;
   height: 4vmin;
@@ -38,12 +40,29 @@ body{
   margin: 4px;
   min-width: 25px;
   min-height: 25px;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transition: 800ms;
+
 }
 
-.cell > h3{
+.cell>h3 {
   font-size: 3vmin;
+}
+
+
+
+.yellow {
+  background-color: #b59f3b;
+}
+
+.green {
+  background-color: #538d4e;
+}
+
+.gray {
+  background-color: #3a3a3c; 
 }

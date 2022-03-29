@@ -5,7 +5,16 @@ import useKeyPress from "./hooks/useKeyPress";
 
 const App = () => {
     const [word, setWord] = useState("");
+    const [wordLetterFrequency, setWordLetterFrequency] = useState(new Map());
     const [gameMap, setGameMap] = useState([
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+    ]);
+    const [cellsClassNames, setCellsClassNames] = useState([
         ["", "", "", "", ""],
         ["", "", "", "", ""],
         ["", "", "", "", ""],
@@ -51,6 +60,17 @@ const App = () => {
             const randomIndex = Math.floor(Math.random() * words.length);
             const randomWord = words[randomIndex].trim();
             setWord(randomWord);
+
+            let letterFreq = new Map();
+            for (let i = 0; i < randomWord.length; i++) {
+                if (letterFreq.get(randomWord[i]))
+                    letterFreq.set(
+                        randomWord[i],
+                        letterFreq.get(randomWord[i]) + 1
+                    );
+                else letterFreq.set(randomWord[i], 1);
+            }
+            setWordLetterFrequency(letterFreq);
         } catch (e) {
             console.log(e);
         }
@@ -77,10 +97,52 @@ const App = () => {
         } else if (key === "Enter") {
             if (!gameMap[currentRow].includes("") && currentRow <= 5) {
                 const guessedWord = getGuessedWord(currentRow);
+
+                const guessedLetters = new Map();
+                const greenCells = [];
+                for (let i = 0; i < guessedWord.length; i++) {
+                    if (guessedWord[i] === word[i]) {
+                        greenCells.push(i);
+                        let newCellsClassName = cellsClassNames;
+                        newCellsClassName[currentRow][i] = "green";
+                        setCellsClassNames(newCellsClassName);
+                        if (!guessedLetters.get(guessedWord[i])) {
+                            guessedLetters.set(guessedWord[i], 1);
+                        } else
+                            guessedLetters.set(
+                                guessedWord[i],
+                                guessedLetters.get(guessedLetters[i]) + 1
+                            );
+                    }
+                }
+
+                for (let i = 0; i < guessedWord.length; i++) {
+                    if (!greenCells.includes(i)) {
+                        if (word.includes(guessedWord[i])) {
+                            if (
+                                !guessedLetters.get(guessedWord[i]) ||
+                                guessedLetters.get(guessedWord[i]) <
+                                    wordLetterFrequency.get(guessedWord[i])
+                            ) {
+                                let newCellsClassName = cellsClassNames;
+                                newCellsClassName[currentRow][i] = "yellow";
+                                setCellsClassNames(newCellsClassName);
+                                if (isNaN(guessedLetters.get(guessedWord[i])))
+                                    guessedLetters.set(guessedWord[i], 1);
+                                else
+                                    guessedLetters.set(
+                                        guessedWord[i],
+                                        guessedLetters.get(guessedWord[i]) + 1
+                                    );
+                            }
+                        } else {
+                            let newCellsClassName = cellsClassNames;
+                            newCellsClassName[currentRow][i] = "gray";
+                            setCellsClassNames(newCellsClassName);
+                        }
+                    }
+                }
                 setCurrentRow(currentRow + 1);
-                console.log("enter accepted, word is", guessedWord);
-                // logic of the game...
-                // for styles can have an array of classnames for each cell
             }
         }
     });
@@ -96,10 +158,12 @@ const App = () => {
             </div>
             <div className="game">
                 <div className="map">
-                    {gameMap.map((row) => (
+                    {gameMap.map((row, row_indx) => (
                         <div className="row">
-                            {row.map((cell) => (
-                                <div className="cell">
+                            {row.map((cell, cell_indx) => (
+                                <div
+                                    className={`cell ${cellsClassNames[row_indx][cell_indx]}`}
+                                >
                                     <h3>{cell}</h3>
                                 </div>
                             ))}
