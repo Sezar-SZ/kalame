@@ -2,6 +2,7 @@ import txt_words from "./5-letters-words.txt";
 import { useEffect, useState } from "react";
 import "./App.css";
 import useKeyPress from "./hooks/useKeyPress";
+import Keyboard from "./keyboard";
 
 const App = () => {
     const [score, setScore] = useState("");
@@ -113,6 +114,7 @@ const App = () => {
             const letterIndex = getLastLetterIndex();
             if (letterIndex !== -1 && letterIndex[0] === currentRow) {
                 newGameMap[letterIndex[0]][letterIndex[1]] = "";
+                setGameMap(newGameMap);
             }
         } else if (key === "Enter") {
             const guessedWord = getGuessedWord(currentRow);
@@ -237,6 +239,7 @@ const App = () => {
                     ))}
                 </div>
             </div>
+            <Keyboard />
         </div>
     );
 };

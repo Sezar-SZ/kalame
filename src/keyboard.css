@@ -1,0 +1,36 @@
+.keyboard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* position: absolute;
+    bottom: 0; */
+}
+
+.keyboard-row{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 90vw;
+}
+
+
+.keyboard-key{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 2.2vmin;
+    background-color: #3a3a3c;
+    margin: 3px;
+    flex: 1;
+    max-width: 7vw;
+    cursor: pointer;
+}
+
+@media screen and (max-width:400px){
+    .keyboard-key{
+        padding: 7px;
+    }
+}
