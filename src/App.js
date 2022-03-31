@@ -11,6 +11,11 @@ const App = () => {
     const [wordsList, setWordsList] = useState([]);
     const [word, setWord] = useState("");
     const [wordLetterFrequency, setWordLetterFrequency] = useState(new Map());
+
+    const [greenLetters, setGreenLetters] = useState([]);
+    const [yellowLetters, setYellowLetters] = useState([]);
+    const [grayLetters, setGrayLetters] = useState([]);
+
     const [gameMap, setGameMap] = useState([
         ["", "", "", "", ""],
         ["", "", "", "", ""],
@@ -102,19 +107,17 @@ const App = () => {
     }, []);
 
     useKeyPress((key) => {
+        let newGameMap = [...gameMap];
         if (key.length === 1 && key !== " ") {
-            let newGameMap = [...gameMap];
             const letterIndex = getNextLetterIndex();
             if (letterIndex !== -1 && letterIndex[0] === currentRow) {
                 newGameMap[letterIndex[0]][letterIndex[1]] = key;
-                setGameMap(newGameMap);
             }
         } else if (key === "Backspace") {
             let newGameMap = [...gameMap];
             const letterIndex = getLastLetterIndex();
             if (letterIndex !== -1 && letterIndex[0] === currentRow) {
                 newGameMap[letterIndex[0]][letterIndex[1]] = "";
-                setGameMap(newGameMap);
             }
         } else if (key === "Enter") {
             const guessedWord = getGuessedWord(currentRow);
@@ -125,9 +128,13 @@ const App = () => {
             ) {
                 const guessedLetters = new Map();
                 const greenCells = [];
+                let newGreenLetters = [...greenLetters];
                 for (let i = 0; i < guessedWord.length; i++) {
                     if (guessedWord[i] === word[i]) {
                         greenCells.push(i);
+
+                        newGreenLetters.push(guessedWord[i]);
+
                         let newCellsClassName = cellsClassNames;
                         newCellsClassName[currentRow][i] = "green";
                         setCellsClassNames(newCellsClassName);
@@ -141,6 +148,8 @@ const App = () => {
                     }
                 }
 
+                let newGrayLetters = [...grayLetters];
+                let newYellowLetters = [...yellowLetters];
                 for (let i = 0; i < guessedWord.length; i++) {
                     if (!greenCells.includes(i)) {
                         if (word.includes(guessedWord[i])) {
@@ -149,6 +158,8 @@ const App = () => {
                                 guessedLetters.get(guessedWord[i]) <
                                     wordLetterFrequency.get(guessedWord[i])
                             ) {
+                                newYellowLetters.push(guessedWord[i]);
+
                                 let newCellsClassName = cellsClassNames;
                                 newCellsClassName[currentRow][i] = "yellow";
                                 setCellsClassNames(newCellsClassName);
@@ -160,17 +171,25 @@ const App = () => {
                                         guessedLetters.get(guessedWord[i]) + 1
                                     );
                             } else {
+                                newGrayLetters.push(guessedWord[i]);
+
                                 let newCellsClassName = cellsClassNames;
                                 newCellsClassName[currentRow][i] = "gray";
                                 setCellsClassNames(newCellsClassName);
                             }
                         } else {
+                            newGrayLetters.push(guessedWord[i]);
+
                             let newCellsClassName = cellsClassNames;
                             newCellsClassName[currentRow][i] = "gray";
                             setCellsClassNames(newCellsClassName);
                         }
                     }
                 }
+                setGreenLetters(newGreenLetters);
+                setYellowLetters(newYellowLetters);
+                setGrayLetters(newGrayLetters);
+
                 if (guessedWord === word) {
                     setData({
                         score: score + 1,
@@ -198,6 +217,7 @@ const App = () => {
                 }, 1000);
             }
         }
+        setGameMap(newGameMap);
     });
 
     useEffect(() => {
@@ -239,7 +259,11 @@ const App = () => {
                     ))}
                 </div>
             </div>
-            <Keyboard />
+            <Keyboard
+                green={greenLetters}
+                yellow={yellowLetters}
+                gray={grayLetters}
+            />
         </div>
     );
 };

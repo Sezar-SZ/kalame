@@ -22,11 +22,35 @@
     align-items: center;
     padding: 10px;
     font-size: 2.2vmin;
-    background-color: #3a3a3c;
+    background-color: #818384;
+    border-radius: 5px;
     margin: 3px;
     flex: 1;
     max-width: 7vw;
     cursor: pointer;
+}
+
+.Enter{
+    background-color: #fff;
+    color: black;
+}
+
+.Backspace{
+    background-color: #fff;
+    color: black;
+}
+
+
+.green{
+    background-color: #538d4e;
+}
+
+.yellow{
+background-color: #b59f3b;
+}
+
+.gray{
+    background-color: #3a3a3c;
 }
 
 @media screen and (max-width:400px){

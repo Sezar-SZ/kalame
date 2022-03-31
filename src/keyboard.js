@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import "./keyboard.css";
 
-const Keyboard = () => {
+const Keyboard = ({ green, yellow, gray }) => {
     const keys_temp_1 = "ض ص ث ق ف غ ع ه خ ح ج چ پ";
     const keys_temp_2 = "ش س ی ب ل ا آ ت ن م ک گ";
-    const keys_temp_3 = "Enter ظ ط ز ر ذ د ئ ء و Backspace";
+    const keys_temp_3 = "Enter ظ ط ژ ز ر ذ د ئ ء و Backspace";
 
     const keys1 = keys_temp_1.split(" ");
     const keys2 = keys_temp_2.split(" ");
@@ -36,12 +36,21 @@ const Keyboard = () => {
         }
     };
 
+    const colorClassProvider = (key) => {
+        if (green.includes(key)) return "green";
+        else if (yellow.includes(key)) return "yellow";
+        else if (gray.includes(key)) return "gray";
+    };
+
     return (
         <div className="keyboard">
             <div className="keyboard-row row-1">
                 {keys1.map((element) => (
                     <div
-                        className={`keyboard-key ${element}`}
+                        className={`keyboard-key ${element} ${colorClassProvider(
+                            element
+                        )}`}
+                        style={{}}
                         onClick={() => {
                             onKeyClicked(element);
                         }}
@@ -53,7 +62,9 @@ const Keyboard = () => {
             <div className="keyboard-row row-2">
                 {keys2.map((element) => (
                     <div
-                        className={`keyboard-key ${element}`}
+                        className={`keyboard-key ${element} ${colorClassProvider(
+                            element
+                        )}`}
                         onClick={() => {
                             onKeyClicked(element);
                         }}
@@ -65,7 +76,9 @@ const Keyboard = () => {
             <div className="keyboard-row row-3">
                 {keys3.map((element) => (
                     <div
-                        className={`keyboard-key ${element}`}
+                        className={`keyboard-key ${element} ${colorClassProvider(
+                            element
+                        )}`}
                         onClick={() => {
                             onKeyClicked(element);
                         }}
