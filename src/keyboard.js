@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import "./keyboard.css";
 
 const Keyboard = ({ green, yellow, gray }) => {
