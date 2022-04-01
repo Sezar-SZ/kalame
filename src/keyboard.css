@@ -58,3 +58,9 @@ background-color: #b59f3b;
         padding: 7px;
     }
 }
+
+@media screen and (max-width: 360px){
+    .keyboard-key{
+        padding: 6px;
+    }
+}

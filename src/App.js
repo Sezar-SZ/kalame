@@ -211,7 +211,7 @@ const App = () => {
                 }
                 setCurrentRow(currentRow + 1);
             } else {
-                setMessage("کلمه صحیح نیست");
+                setMessage("کلمه در لیست نیست");
                 setTimeout(() => {
                     setMessage("");
                 }, 1000);
@@ -221,7 +221,7 @@ const App = () => {
     });
 
     useEffect(() => {
-        console.log(word);
+        // console.log(word);
     }, [word]);
 
     return (
