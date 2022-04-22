@@ -3,8 +3,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* position: absolute;
-    bottom: 0; */
 }
 
 .keyboard-row{
@@ -53,14 +51,15 @@ background-color: #b59f3b;
     background-color: #3a3a3c;
 }
 
-@media screen and (max-width:400px){
+@media screen and (max-width:435px){
+    .keyboard{
+        position: absolute;
+        bottom: 0;
+    }
+
     .keyboard-key{
-        padding: 7px;
+        padding: 1.5vh 2.4vw;
+        margin: 2px;
     }
 }
 
-@media screen and (max-width: 360px){
-    .keyboard-key{
-        padding: 6px;
-    }
-}
